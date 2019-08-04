@@ -29,7 +29,7 @@ TODO:
 * Using github.com/stretchr/testify for making unit tests
 * More strict and robust error handling
 
-* Airports (...) sorted by distance within a user provided radius of a user provided lat/long point. *
+* Airports (...) sorted by distance within a user provided radius of a user provided lat/long point.
 
 TODO:
 
@@ -78,7 +78,7 @@ TODO:
 
 ### obieq/go-cloudant
 
-<https://github.com/obieq/go-cloudant/> supports partly building `_design/view1/_search/geo` path postfix (desig part, search part not). Skipped.
+<https://github.com/obieq/go-cloudant/> supports partly building `_design/view1/_search/geo` path postfix (design part, search part not). Skipped.
 
 Last commit: Sep 29, 2014
 

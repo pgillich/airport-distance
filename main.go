@@ -127,6 +127,7 @@ func startService() {
 }
 
 // handleDistanceList is the handler function of /list/distance
+// TODO Remove JSON indentation
 func handleDistanceList(w http.ResponseWriter, r *http.Request) {
 	responseBytes := []byte{}
 	w.Header().Set("Content-Type", "application/json")
@@ -185,6 +186,7 @@ func parseFloatQueryParam(values url.Values, name string, defaultValue float64, 
 }
 
 // executeCli makes 1 CLI operation
+// TODO Remove JSON indentation
 func executeCli() {
 	var err error
 
@@ -198,8 +200,7 @@ func executeCli() {
 }
 
 // doDistanceList is the main function to collect, order and marshall response
-// The response is always JSON string, which contains error messages, too.
-// TODO Remove JSON indentation
+// The response is structure, which contains error messages, too; ready to make a JSON text
 func doDistanceList(request DistanceListRequest) (DistanceListResponse, error) {
 	var err error
 
