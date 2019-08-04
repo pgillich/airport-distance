@@ -59,7 +59,7 @@ Does not support non-authentication (password is needed), see:
 Last commit: Oct 13, 2016
 
 TODO:
-* Improve and upstream own extension
+* Improve and upstream own extension, see `cloudant.go`, *Extension to cloudant.DesignDocument*
 
 ### timjacobi/go-couchdb
 
