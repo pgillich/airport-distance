@@ -142,7 +142,7 @@ All possible CLI parameters are documented in the built-in help, for example:
 Example for starting one operation:
 
 ```bash
-./airport-distance -fromLon 0 -toLon 30 -fromLat 0 -toLat 5 -centerLon 1 -centerLat 1
+./airport-distance -centerLon 3 -centerLat 2 -radius 500000
 ```
 
 ### Running as a REST service
@@ -156,7 +156,7 @@ Example for starting as a service:
 Exampe URL for getting an airport list:
 
 ```
-http://localhost:8080/list/distance?fromLon=0&toLon=30&fromLat=0&toLat=5&centerLon=1&centerLat=1
+http://localhost:8080/list/distance?centerLon=1&centerLat=1&radius=400000
 ```
 
 ### Running in a Docker container
@@ -181,17 +181,10 @@ Example for a response:
 ```bash
 {
   "request": {
-    "From": {
-      "Lat": 0,
-      "Lon": 0
-    },
-    "To": {
-      "Lat": 5,
-      "Lon": 30
-    },
+    "Radius": 500000,
     "Center": {
-      "Lat": 1,
-      "Lon": 1
+      "Lat": 2,
+      "Lon": 3
     }
   },
   "errors": [],
@@ -201,56 +194,56 @@ Example for a response:
       "name": "Savut",
       "lat": 1,
       "lon": 1,
-      "distance": 0
+      "distance": 248568.719240913
     },
     {
       "id": "aa915feea5ecf2f87d0c7bca67cd6f4f",
       "name": "Xakan",
       "lat": 1,
       "lon": 1,
-      "distance": 0
+      "distance": 248568.719240913
     },
     {
       "id": "efb9627917c711e4e6852dfb7708172f",
       "name": "Xakan",
       "lat": 1,
       "lon": 1,
-      "distance": 0
+      "distance": 248568.719240913
     },
     {
       "id": "f6d336d85815d9ebc82fa5009fd7488e",
       "name": "Xugan",
       "lat": 1,
       "lon": 1,
-      "distance": 0
+      "distance": 248568.719240913
     },
     {
       "id": "aa915feea5ecf2f87d0c7bca6777b4f6",
       "name": "Les Ailerons",
       "lat": 0,
       "lon": 0,
-      "distance": 157249.38127194397
+      "distance": 400862.6244736863
     },
     {
       "id": "f6d336d85815d9ebc82fa5009fd12f34",
       "name": "Mainz Finthen",
       "lat": 0,
       "lon": 0,
-      "distance": 157249.38127194397
+      "distance": 400862.6244736863
     },
     {
       "id": "f6d336d85815d9ebc82fa5009fc56d04",
       "name": "Vilamendhoo",
       "lat": 0,
       "lon": 0,
-      "distance": 157249.38127194397
+      "distance": 400862.6244736863
     },
     {
       "id": "f6d336d85815d9ebc82fa5009f4b7181",
       "name": "Sao Tome Intl",
       "lat": 0.378175,
       "lon": 6.712153,
-      "distance": 638866.0413716333
+      "distance": 450353.71383098216
     },
 (...)
 ```
@@ -260,14 +253,7 @@ Example for a failed response:
 ```bash
 {
   "request": {
-    "From": {
-      "Lat": 0,
-      "Lon": 0
-    },
-    "To": {
-      "Lat": 5,
-      "Lon": 30
-    },
+    "Radius": 500000,
     "Center": {
       "Lat": 1,
       "Lon": 1

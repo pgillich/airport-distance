@@ -22,14 +22,8 @@ import (
 
 // TODO move to common directory
 const (
-	// OptFromLat is the latitude of From corner
-	OptFromLat = "fromLat"
-	// OptFromLon is the longitude of From corner
-	OptFromLon = "fromLon"
-	// OptToLat is the latitude of To corner
-	OptToLat = "toLat"
-	// OptToLon is the longitude of From corner
-	OptToLon = "toLon"
+	// OptRadius is the radius around the Center point in meters
+	OptRadius = "radius"
 	// OptCenterLat is the latitude of Center (a point of the distance)
 	OptCenterLat = "centerLat"
 	// OptCenterLon is the longitude of Center (a point of the distance)
@@ -86,8 +80,7 @@ type GeoCoord struct {
 
 // DistanceListRequest contains the CLI or REST parameters for distance list calculation
 type DistanceListRequest struct {
-	From   GeoCoord
-	To     GeoCoord
+	Radius float64
 	Center GeoCoord
 }
 
@@ -132,18 +125,11 @@ func handleDistanceList(w http.ResponseWriter, r *http.Request) {
 	responseBytes := []byte{}
 	w.Header().Set("Content-Type", "application/json")
 
-	parserErrors := make([]string, 0, 6) // capacity: max. number of parser error
+	parserErrors := make([]string, 0, 3) // capacity: max. number of parser error
 	values := r.URL.Query()
 
 	request := DistanceListRequest{
-		From: GeoCoord{
-			Lat: parseFloatQueryParam(values, OptFromLat, GlobalCliRequest.From.Lat, &parserErrors),
-			Lon: parseFloatQueryParam(values, OptFromLon, GlobalCliRequest.From.Lon, &parserErrors),
-		},
-		To: GeoCoord{
-			Lat: parseFloatQueryParam(values, OptToLat, GlobalCliRequest.To.Lat, &parserErrors),
-			Lon: parseFloatQueryParam(values, OptToLon, GlobalCliRequest.To.Lon, &parserErrors),
-		},
+		Radius: parseFloatQueryParam(values, OptRadius, GlobalCliRequest.Radius, &parserErrors),
 		Center: GeoCoord{
 			Lat: parseFloatQueryParam(values, OptCenterLat, GlobalCliRequest.Center.Lat, &parserErrors),
 			Lon: parseFloatQueryParam(values, OptCenterLon, GlobalCliRequest.Center.Lon, &parserErrors),
@@ -160,7 +146,7 @@ func handleDistanceList(w http.ResponseWriter, r *http.Request) {
 		responseBytes, _ = json.MarshalIndent(response, "", "  ")
 		w.WriteHeader(http.StatusPreconditionFailed)
 	} else {
-		response, err := doDistanceList(GlobalCliRequest)
+		response, err := doDistanceList(request)
 		// TODO handling marshalling error
 		responseBytes, _ = json.MarshalIndent(response, "", "  ")
 		if err != nil {
@@ -210,12 +196,15 @@ func doDistanceList(request DistanceListRequest) (DistanceListResponse, error) {
 		Airports: []Airport{},
 	}
 
+	airports := []Airport{}
+
 	if err = checkCorrectDistanceListRequest(request); err != nil {
 		reponse.Errors = append(reponse.Errors, err.Error())
-	} else if reponse.Airports, err = GetAirportRecords(request); err != nil {
+	} else if airports, err = GetAirportRecords(request); err != nil {
 		reponse.Errors = append(reponse.Errors, err.Error())
 	} else {
-		calculateDistances(reponse.Airports, GlobalCliRequest.Center)
+		calculateDistances(airports, GlobalCliRequest.Center)
+		reponse.Airports = filterByRadius(airports, request.Radius)
 		orderByDistance(reponse.Airports)
 	}
 
@@ -236,6 +225,18 @@ func calculateDistances(airports []Airport, center GeoCoord) {
 			center.Lat/RadDeg, center.Lon/RadDeg,
 		)
 	}
+}
+
+func filterByRadius(airports []Airport, radius float64) []Airport {
+	filteredAirports := make([]Airport, 0, len(airports))
+
+	for _, airport := range airports {
+		if airport.Distance <= radius {
+			filteredAirports = append(filteredAirports, airport)
+		}
+	}
+
+	return filteredAirports
 }
 
 // calculateDistance calculates distance between 2 spherical coords (input in radians)
@@ -268,10 +269,7 @@ func orderByDistance(airports []Airport) {
 
 // parseParams is called by init()
 func parseParams() {
-	flag.Float64Var(&GlobalCliRequest.From.Lat, OptFromLat, 0.0, "Latitude of From corner")
-	flag.Float64Var(&GlobalCliRequest.From.Lon, OptFromLon, 0, "Longitude of From corner")
-	flag.Float64Var(&GlobalCliRequest.To.Lat, OptToLat, 30.0, "Latitude of To corner")
-	flag.Float64Var(&GlobalCliRequest.To.Lon, OptToLon, 5.0, "Longitude of To corner")
+	flag.Float64Var(&GlobalCliRequest.Radius, OptRadius, 500000.0, "Radius around the center point in meters")
 	flag.Float64Var(&GlobalCliRequest.Center.Lat, OptCenterLat, 2.0, "Latitude of Center corner")
 	flag.Float64Var(&GlobalCliRequest.Center.Lon, OptCenterLon, 3.0, "Longitude of Center corner")
 

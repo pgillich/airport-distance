@@ -34,8 +34,7 @@ func TestCloudant_IBM_Bluemix_go_cloudant_Extended(t *testing.T) {
 	}
 
 	request := DistanceListRequest{
-		From:   GeoCoord{Lat: 0.0, Lon: 0.0},
-		To:     GeoCoord{Lat: 5.0, Lon: 30.0},
+		Radius: 222000.0,
 		Center: GeoCoord{Lat: 2.0, Lon: 3.0},
 	}
 
@@ -46,15 +45,15 @@ func TestCloudant_IBM_Bluemix_go_cloudant_Extended(t *testing.T) {
 	}
 
 	calculateDistances(airports, request.Center)
-	orderByDistance(airports)
+	filteredAirports := filterByRadius(airports, request.Radius)
+	orderByDistance(filteredAirports)
 
 	return
 }
 
 func TestDistance_doDistanceList(t *testing.T) {
 	request := DistanceListRequest{
-		From:   GeoCoord{Lat: 0.0, Lon: 0.0},
-		To:     GeoCoord{Lat: 2.0, Lon: 2.0},
+		Radius: 333000.0,
 		Center: GeoCoord{Lat: 2.0, Lon: 3.0},
 	}
 
