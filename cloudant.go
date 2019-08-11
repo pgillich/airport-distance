@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"net/http"
 	"strconv"
 
@@ -22,9 +23,16 @@ func GetAirportRecords(request DistanceListRequest) ([]Airport, error) {
 		response *cloudant.SearchResp
 	)
 
+	radiusToDegree := EarthRadius * 2.0 * math.Pi / 360.0
+	// Cludant search accepts only integers --> corners must be wider to int
+	fromLon := math.Floor(request.Center.Lon - request.Radius/radiusToDegree)
+	toLon := math.Ceil(request.Center.Lon + request.Radius/radiusToDegree)
+	fromLat := math.Floor(request.Center.Lat - request.Radius/radiusToDegree)
+	toLat := math.Ceil(request.Center.Lat + request.Radius/radiusToDegree)
+
 	query := fmt.Sprintf("lon:[%v TO %v] AND lat:[%v TO %v]",
-		request.From.Lon, request.To.Lon,
-		request.From.Lat, request.To.Lat,
+		fromLon, toLon,
+		fromLat, toLat,
 	)
 
 	if client, err = cloudant.NewClient(GlobalCloudantConfig.userName, ""); err != nil {
