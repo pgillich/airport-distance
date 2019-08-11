@@ -11,8 +11,6 @@ All examples are tested on Linux bash (Ubuntu 16.04, x86_64). Examples may work 
 * Git bash
 * MobaXterm local shell
 
-Simplified parameter handling (radius, instead of corners) can be found on branch [simple-radius](../../tree/simple-radius).
-
 ## Restrictions
 
 *We need to be able to review your code in a short time frame.*
