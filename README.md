@@ -43,7 +43,7 @@ Finally, IBM-Cloud/go-cloudant was selected with a small extending part.
 
 TODO:
 * Checking if client libraries support proxy
-* Solving and upstream increasing max. 200 Cloudant record limitation
+* Solving and upstream increasing max. 200 Cloudant record limitation (paging with bookmarks)
 
 Unofficial libraries:
 
