@@ -27,6 +27,7 @@ TODO:
 * Using github.com/golang/glog for better logging
 * Using github.com/spf13/{pflag,cobra,viper} for better parameter handling
 * Using github.com/stretchr/testify for making unit tests
+* Using github.com/moogar0880/problems for providing RFC7807-compliant error messages
 * More strict and robust error handling
 
 * Airports (...) sorted by distance within a user provided radius of a user provided lat/long point.
