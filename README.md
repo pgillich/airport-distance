@@ -86,7 +86,7 @@ Last commit: Sep 29, 2014
 
 Prerequisites:
 
-* Go 1.11 or above (tested with `go1.11.5 linux/amd64`)
+* Go 1.11 or above (tested with `go1.11.5 and go1.12.7 linux/amd64`)
 * Go modules environment (supported by Go 1.11 and above, see: `GO111MODULE` env variable)
 * (Optional) Golint from github.com/golang/lint
 * (Optional) Access to https://mikerhodes.cloudant.com for running tests
@@ -103,7 +103,7 @@ Golint for optional static code checking can be installed by below command:
 GO111MODULE=off go get -u golang.org/x/lint/golint
 ```
 
-Running `go test` needs access to <https://mikerhodes.cloudant.com/airportdb/_design/view1>
+Running optional `go test` needs access to <https://mikerhodes.cloudant.com/airportdb/_design/view1>
 
 ### Building executable binary
 
@@ -144,6 +144,8 @@ Example for starting one operation:
 ```bash
 ./airport-distance -centerLon 3 -centerLat 2 -radius 500000
 ```
+
+Coordinates are set in degree, radius in meter.
 
 ### Running as a REST service
 
